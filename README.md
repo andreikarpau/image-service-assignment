@@ -23,7 +23,7 @@ better to run it in a separate cluster.
 In the task, there are no special requirements on hosting. Current design suggests using AWS cloud and its managed 
 services.  
 However, it is not a must and similar architecture can be developed using any other cloud provider or even on-prem under 
-the assumption of having enough computational power, memory and proper orchestration system (e.g. Kubernetes).
+the assumption of having enough computational power, memory, proper storage and orchestration system (e.g. Kubernetes).
 
 ### System Architecture
 ![Component diagram](./component-diagram.png)
@@ -39,7 +39,8 @@ instructions (crop/resize/watermark).
 - Download API: this is a separate API, because it has very different type of workloads than Upload API. So, Download 
 API should be hosted in own auto-scaling group. The paratemers (e.g. instance types) of Upload API and Download API 
 servers might also be different. They should be chosen based on performance testing. 
-- Storage: the service stores images on S3. It's durable, scalable and cost-efficient.
+- Storage: the service stores images on S3. It's durable, scalable and cost-efficient. It also has an option of
+multipart upload that simplifies the bulk upload functionality.
 - [Optional] DynamoDB: it is used to store image metadata. It might be needed if the service should cover 
 special use cases such as image search, parametrization, etc. In the current use case, DynamoDB is more preferable than 
 RDBMS because of the following factors: better scalability, no need for transactions, no hard defined schema 
